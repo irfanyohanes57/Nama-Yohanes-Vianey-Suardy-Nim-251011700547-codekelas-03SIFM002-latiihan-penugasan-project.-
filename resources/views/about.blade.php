@@ -9,9 +9,11 @@
 <body>
     <h1>Halaman About</h1>
     <p>Selamat datang di halaman about</p>
-    <p>Nama : Ifolala Halawa</p>
-    <p>NIM : 251011700436</p>
+
+    <img src="{{ asset('images/irfan.jpeg') }}" alt="Foto Profil" style="width: 200px;">
+
+    <p>Nama : Yohanes vianey suardy</p>
+    <p>NIM : 251011700547</p>
     <p>Prodi : Sistem Informasi - UNPAM</p>
 </body>
-
 </html>

@@ -1,0 +1,27 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('perangkats', function (Blueprint $table) {
+            $table->id();
+            $table->string('nama');
+            $table->string('kategori'); // Hardware / Software / Periferal
+            $table->text('deskripsi');
+            $table->string('spesifikasi');
+            $table->string('status');
+            $table->string('gambar', 500)->nullable();
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('perangkats');
+    }
+};
