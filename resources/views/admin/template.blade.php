@@ -1,3 +1,6 @@
+@php
+    $bgKampus = 'images/kampus.jpg';
+@endphp
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -6,7 +9,20 @@
     <title>@yield('title', 'Admin Panel')</title>
     <style>
         * { box-sizing: border-box; }
-        body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f6f9; color: #212529; font-size: 14px; }
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #212529;
+            font-size: 14px;
+            background-color: #f4f6f9;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.55)),
+                url('{{ asset($bgKampus) }}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
 
         /* Layout */
         .wrapper { display: flex; min-height: 100vh; }
@@ -20,10 +36,10 @@
 
         /* Konten */
         .main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
-        .topbar { background: #fff; padding: 14px 25px; display: flex; justify-content: flex-end; align-items: center; gap: 15px; border-bottom: 1px solid #dee2e6; }
+        .topbar { background: rgba(255, 255, 255, 0.9); padding: 14px 25px; display: flex; justify-content: flex-end; align-items: center; gap: 15px; border-bottom: 1px solid #dee2e6; }
         .topbar span { color: #495057; }
         .content { padding: 25px; flex: 1; }
-        .footer { text-align: center; padding: 15px; color: #888; font-size: 12px; }
+        .footer { text-align: center; padding: 15px; color: #495057; font-size: 12px; background: rgba(255, 255, 255, 0.85); }
 
         /* Komponen umum */
         .btn { display: inline-block; padding: 6px 12px; border-radius: 4px; border: 0; color: #fff; text-decoration: none; font-size: 13px; cursor: pointer; }
