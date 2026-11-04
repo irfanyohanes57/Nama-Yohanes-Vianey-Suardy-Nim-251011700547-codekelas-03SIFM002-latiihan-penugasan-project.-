@@ -1,38 +1,60 @@
 <?php
 
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\MahasiswaController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controller\LoginController;
+namespace App\Http\Controllers;
 
-// P10 penambahan route untuk login
-Route::get('/login', [LoginController::class, 'index'])->name('login');
-Route::post('/login', [LoginController::class, 'actionLogin'])->name('login.action');
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-Route::get('/', function () {
-    return view('page.home');
-});
+class LoginController extends Controller
+{
+    // Tampilkan form login
+    public function index()
+    {
+        if (Auth::check()) {
+            return redirect()->route('admin.index');
+        }
 
-Route::get('/profile', function () {
-    return redirect('/mahasiswa');
-});
+        return view('login');
+    }
 
-Route::get('/project', function () {
-    return view('page.project');
-});
+    // Proses login (username + password)
+    public function actionLogin(Request $request)
+    {
+        $kredensial = $request->validate([
+            'username' => ['required', 'string'],
+            'password' => ['required', 'string'],
+        ], [
+            'required' => ':attribute wajib diisi.',
+        ], [
+            'username' => 'Username',
+            'password' => 'Password',
+        ]);
 
-Route::get('/about', function () {
-    return view('page.about');
-});
+        if (Auth::attempt($kredensial, $request->boolean('remember'))) {
+            $request->session()->regenerate();
 
-Route::get('/mahasiswa', [MahasiswaController::class, 'index']);
+            // Hanya akun admin yang boleh masuk
+            if (Auth::user()->role !== 'admin') {
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
 
-// ===== Admin: kelola data perangkat (CRUD) =====
-Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
-Route::get('/admin/projects', [AdminController::class, 'index']);
-Route::get('/admin/create', [AdminController::class, 'create'])->name('admin.create');
-Route::post('/admin', [AdminController::class, 'store'])->name('admin.store');
-Route::get('/admin/{perangkat}/edit', [AdminController::class, 'edit'])->whereNumber('perangkat')->name('admin.edit');
-Route::put('/admin/{perangkat}', [AdminController::class, 'update'])->whereNumber('perangkat')->name('admin.update');
-Route::delete('/admin/{perangkat}', [AdminController::class, 'destroy'])->whereNumber('perangkat')->name('admin.destroy');
+                return back()->withErrors(['username' => 'Akun ini bukan admin.'])->onlyInput('username');
+            }
+
+            return redirect()->intended(route('admin.index'));
+        }
+
+        return back()->withErrors(['username' => 'Username atau password salah.'])->onlyInput('username');
+    }
+
+    // Logout
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login')->with('sukses', 'Anda berhasil logout.');
+    }
+}

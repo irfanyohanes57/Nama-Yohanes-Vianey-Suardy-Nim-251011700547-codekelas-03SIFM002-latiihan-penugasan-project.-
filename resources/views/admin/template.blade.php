@@ -76,7 +76,11 @@
         <!-- AREA UTAMA -->
         <div class="main">
             <div class="topbar">
-                <span>Halo, Administrator</span>
+                <span>Halo, {{ auth()->user()->name ?? 'Administrator' }}</span>
+                <form method="POST" action="{{ route('logout') }}" style="margin:0">
+                    @csrf
+                    <button type="submit" class="btn btn-danger btn-sm">Logout</button>
+                </form>
             </div>
 
             <div class="content">
