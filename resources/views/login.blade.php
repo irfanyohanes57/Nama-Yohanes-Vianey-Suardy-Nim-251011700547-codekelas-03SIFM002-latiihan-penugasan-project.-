@@ -41,7 +41,6 @@
 <body>
     <div class="login-box">
         <h1>Login Admin</h1>
-        <p class="sub">Masuk untuk mengelola data Projects</p>
 
         @if (session('sukses'))
             <div class="alert alert-success">{{ session('sukses') }}</div>
